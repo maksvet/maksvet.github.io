@@ -1,37 +1,53 @@
-import React, { useState } from 'react';
-import CountdownTimer from './components/countdown.js'; // Make sure this path is correct
-
+import React, { useState, useEffect } from 'react';
+import CountdownTimer from './components/countdown.js'; // Ensure correct path
 
 const App = () => {
   const [N0, setN0] = useState(0);
   const [N1, setN1] = useState(0);
+  const [isPlayerLanded, setIsPlayerLanded] = useState(false);
+  const [isOpponentLanded, setIsOpponentLanded] = useState(false);
   const [startCountdown, setStartCountdown] = useState(false);
   const [timeLeft, setTimeLeft] = useState(240); // Total match time in seconds
+  const [playerAirtime, setPlayerAirtime] = useState(0);
+  const [opponentAirtime, setOpponentAirtime] = useState(0);
 
-  const handleTacticalLanding = (time) => {
-    console.log("Tactical Landing Time:", time);
+  const handleTacticalLanding = () => {
+    console.log("Tactical Landing Time reached!");
   };
 
-  const elapsedTime = 240 - timeLeft; // Time elapsed since the start of the match
-  const playerPoints = elapsedTime + 50 * N0;
-  const opponentPoints = elapsedTime + 50 * N1;
+  useEffect(() => {
+    // Update airtime points every second if the countdown has started
+    if (startCountdown) {
+      const updateAirtime = () => {
+        if (!isPlayerLanded) {
+          setPlayerAirtime(playerAirtime + 1);
+        }
+        if (!isOpponentLanded) {
+          setOpponentAirtime(opponentAirtime + 1);
+        }
+      };
+
+      const timer = setTimeout(updateAirtime, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [playerAirtime, opponentAirtime, isPlayerLanded, isOpponentLanded, startCountdown]);
+
+  // Calculate total points for player and opponent
+  const playerPoints = playerAirtime + 50 * N0;
+  const opponentPoints = opponentAirtime + 50 * N1;
 
   return (
     <div>
-      <input
-        type="number"
-        placeholder="N0 (My Cuts)"
-        value={N0}
-        onChange={(e) => setN0(parseInt(e.target.value))}
-      />
+      <input type="number" placeholder="N0 (My Cuts)" value={N0} onChange={(e) => setN0(parseInt(e.target.value, 10))} />
+      <button onClick={() => setIsPlayerLanded(!isPlayerLanded)}>
+        {isPlayerLanded ? "Take Off" : "Land"}
+      </button>
       <div>My Points: {playerPoints}</div>
 
-      <input
-        type="number"
-        placeholder="N1 (Opponent Cuts)"
-        value={N1}
-        onChange={(e) => setN1(parseInt(e.target.value))}
-      />
+      <input type="number" placeholder="N1 (Opponent Cuts)" value={N1} onChange={(e) => setN1(parseInt(e.target.value, 10))} />
+      <button onClick={() => setIsOpponentLanded(!isOpponentLanded)}>
+        {isOpponentLanded ? "Take Off" : "Land"}
+      </button>
       <div>Opponent Points: {opponentPoints}</div>
 
       <button onClick={() => setStartCountdown(true)}>Start Countdown</button>
@@ -43,6 +59,8 @@ const App = () => {
           timeLeft={timeLeft}
           setTimeLeft={setTimeLeft}
           onTacticalLanding={handleTacticalLanding}
+          isPlayerLanded={isPlayerLanded}
+          isOpponentLanded={isOpponentLanded}
         />
       )}
     </div>
