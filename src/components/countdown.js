@@ -24,9 +24,13 @@ const CountdownTimer = ({ N0, N1, timeLeft, setTimeLeft, onTacticalLanding, isPl
 
         if (playerPoints > opponentPotentialPoints) {
             setShowLandImmediately(true); // Show "LAND IMMEDIATELY" immediately
+
+        } else if (playerPoints > opponentPoints) {
             const tacticalTime = opponentPotentialPoints - playerPoints;
             setLandCountdown(tacticalTime);
-        } else {
+        }
+
+        else {
             setShowLandImmediately(false); // Hide "LAND IMMEDIATELY" if condition not met
             setLandCountdown(null);
         }
