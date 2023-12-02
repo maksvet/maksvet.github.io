@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import CountdownTimer from './components/countdown.js'; // Ensure correct path
+import CountdownTimer from './components/countdown.js';
+import SpeechRec from './components/speech_rec.js';
 
 const App = () => {
   const [N0, setN0] = useState(0);
@@ -14,6 +15,25 @@ const App = () => {
   const handleTacticalLanding = () => {
     console.log("Tactical Landing Time reached!");
   };
+  const handleVoiceCommand = (command) => {
+    switch (command) {
+      case 'старт':
+        setStartCountdown(true);
+        break;
+      case 'взлетел':
+        setIsPlayerLanded(false);
+        break;
+      case 'сел':
+        setIsPlayerLanded(true);
+        break;
+      case 'отруб':
+        setN0(N0 + 1);
+        break;
+
+      default:
+        break;
+    }
+  }
 
   useEffect(() => {
     // Update airtime points every second if the countdown has started
@@ -51,7 +71,7 @@ const App = () => {
       <div>Opponent Points: {opponentPoints}</div>
 
       <button onClick={() => setStartCountdown(true)}>Start Countdown</button>
-
+      <SpeechRec onCommand={handleVoiceCommand} />
       {startCountdown && (
         <CountdownTimer
           N0={N0}
