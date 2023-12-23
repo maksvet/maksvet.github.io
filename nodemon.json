@@ -1,0 +1,7 @@
+{
+    "watch": ["src"],
+    "ext": "js,jsx,json,css",
+    "ignore": ["src/**/*.test.js"],
+    "exec": "react-app-rewired start"
+  }
+  

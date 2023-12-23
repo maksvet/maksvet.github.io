@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import CountdownTimer from './components/countdown.js';
-import SpeechRec from './components/speech_rec.js';
+import VoiceWidget from './voiceWidgets/VoiceWidget.js';
+import VoiceWidgetRhino from './voiceWidgets/VoiceWidgetRhino.js';
 
 const App = () => {
+  console.log('Rendering App component');
+
   const [N0, setN0] = useState(0);
   const [N1, setN1] = useState(0);
   const [isPlayerLanded, setIsPlayerLanded] = useState(false);
@@ -15,28 +18,8 @@ const App = () => {
   const handleTacticalLanding = () => {
     console.log("Tactical Landing Time reached!");
   };
-  const handleVoiceCommand = (command) => {
-    switch (command) {
-      case 'старт':
-        setStartCountdown(true);
-        break;
-      case 'взлетел':
-        setIsPlayerLanded(false);
-        break;
-      case 'сел':
-        setIsPlayerLanded(true);
-        break;
-      case 'отруб':
-        setN0(N0 + 1);
-        break;
-
-      default:
-        break;
-    }
-  }
 
   useEffect(() => {
-    // Update airtime points every second if the countdown has started
     if (startCountdown) {
       const updateAirtime = () => {
         if (!isPlayerLanded) {
@@ -52,7 +35,6 @@ const App = () => {
     }
   }, [playerAirtime, opponentAirtime, isPlayerLanded, isOpponentLanded, startCountdown]);
 
-  // Calculate total points for player and opponent
   const playerPoints = playerAirtime + 50 * N0;
   const opponentPoints = opponentAirtime + 50 * N1;
 
@@ -71,7 +53,6 @@ const App = () => {
       <div>Opponent Points: {opponentPoints}</div>
 
       <button onClick={() => setStartCountdown(true)}>Start Countdown</button>
-      <SpeechRec onCommand={handleVoiceCommand} />
       {startCountdown && (
         <CountdownTimer
           N0={N0}
@@ -83,6 +64,16 @@ const App = () => {
           isOpponentLanded={isOpponentLanded}
         />
       )}
+
+      <div className="App">
+        <VoiceWidget />
+      </div>
+
+      <div className="App">
+        <VoiceWidgetRhino />
+      </div>
+
+
     </div>
   );
 };
