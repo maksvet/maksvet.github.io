@@ -3,7 +3,7 @@ import { usePorcupine } from "@picovoice/porcupine-react";
 import porcupineModel from "../lib/porcupine/porcupineModel";
 import porcupineKeywords from "../lib/porcupine/porcupineKeywords";
 
-export default function VoiceWidget() {
+export default function VoiceWidget({ onWakeWordDetected }) {
     const [keywordDetections, setKeywordDetections] = useState([]);
     const accessKey = process.env.REACT_APP_ACCESS_KEY || "";
 
@@ -20,8 +20,7 @@ export default function VoiceWidget() {
 
     const initEngine = useCallback(async () => {
         await init(accessKey, porcupineKeywords, porcupineModel);
-    }, [init, porcupineKeywords]);
-
+    }, [init, porcupineKeywords, accessKey]); // Include accessKey in the dependencies array
 
     useEffect(() => {
         // Initialize the engine on mount
@@ -30,13 +29,14 @@ export default function VoiceWidget() {
 
     useEffect(() => {
         if (keywordDetection !== null) {
-            setKeywordDetections((oldVal) => [...oldVal, keywordDetection.label])
+            setKeywordDetections((oldVal) => [...oldVal, keywordDetection.label]);
+            onWakeWordDetected(); // Use the destructured prop directly
         }
-    }, [keywordDetection]);
+    }, [keywordDetection, onWakeWordDetected]); // Include onWakeWordDetected in the dependencies array
 
     return (
         <div className="voice-widget">
-            <h2>VoiceWidget</h2>
+            <h2>Wake word</h2>
             <h3>
                 <label>
                     <button

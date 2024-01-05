@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRhino } from "@picovoice/rhino-react";
 
 import rhinoModel from "../lib/rhino/rhinoModel";
@@ -6,7 +6,7 @@ import rhinoContext from "../lib/rhino/rhinoContext"
 
 const accessKey = process.env.REACT_APP_ACCESS_KEY || "";
 
-export default function VoiceWidgetRhino() {
+export default function VoiceWidgetRhino({ initRhino, startListening }) {
 
   const {
     inference,
@@ -25,6 +25,9 @@ export default function VoiceWidgetRhino() {
       rhinoContext,
       rhinoModel,
     );
+    if (isLoaded) {
+      await process()
+    }
   }
 
   const rhnProcess = async () => {
@@ -35,9 +38,24 @@ export default function VoiceWidgetRhino() {
     await release()
   }
 
+  useEffect(() => {
+    if (initRhino) {
+      rhnInit();
+    }
+  }, [initRhino]); // Dependency array
+
+  useEffect(() => {
+    if (startListening && isLoaded) {
+      // Start Rhino processing
+      if (!isListening) {
+        rhnProcess();
+      } // This function should start the Rhino listening process
+    }
+  }, [startListening, isLoaded]);
+
   return (
     <div className="voice-widget">
-      <h2>VoiceWidget</h2>
+      <h2>Commands detection</h2>
       <h3>
         <button className="start-button" onClick={() => rhnInit()} disabled={isLoaded}>
           Init Rhino

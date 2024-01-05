@@ -15,6 +15,46 @@ const App = () => {
   const [playerAirtime, setPlayerAirtime] = useState(0);
   const [opponentAirtime, setOpponentAirtime] = useState(0);
 
+  // Porcupine code
+  const [wakeWordDetected, setWakeWordDetected] = useState(false);
+
+
+  const onWakeWordDetected = () => {
+    console.log('Wake word detected');
+    setWakeWordDetected(true);
+    setInitRhino(false);
+    setTimeout(() => {
+      setInitRhino(true);
+      setIsListeningForCommand(true);
+    }, 0)
+
+
+  };
+
+  useEffect(() => {
+    if (wakeWordDetected) {
+      setIsListeningForCommand(true);
+    }
+  }, [wakeWordDetected]);
+
+  // Rhino code
+  const [initRhino, setInitRhino] = useState(false);
+  const [isListeningForCommand, setIsListeningForCommand] = useState(false);
+  const onCommandRecognized = (command) => {
+    console.log(`Command recognized: ${command}`);
+    // Logic to handle different commands
+    if (command === 'Start') {
+      setStartCountdown(true);
+    }
+    // ... handle other commands
+    // // Reset Rhino states for next command
+    // setInitRhino(false);
+    // setTimeout(() => {
+    //   setInitRhino(true);
+    //   setStartlistening(true); // Re-activate listening
+    // }, 0);
+  };
+
   const handleTacticalLanding = () => {
     console.log("Tactical Landing Time reached!");
   };
@@ -66,14 +106,12 @@ const App = () => {
       )}
 
       <div className="App">
-        <VoiceWidget />
+        <VoiceWidget onWakeWordDetected={onWakeWordDetected} />
       </div>
 
-      <div className="App">
-        <VoiceWidgetRhino />
-      </div>
-
-
+      {isListeningForCommand && (
+        <VoiceWidgetRhino initRhino={initRhino} startListening={isListeningForCommand} onCommandRecognized={onCommandRecognized} />
+      )}
     </div>
   );
 };
