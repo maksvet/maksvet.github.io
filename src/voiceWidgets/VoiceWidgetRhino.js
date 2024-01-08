@@ -6,7 +6,7 @@ import rhinoContext from "../lib/rhino/rhinoContext"
 
 const accessKey = process.env.REACT_APP_ACCESS_KEY || "";
 
-export default function VoiceWidgetRhino({ initRhino, startListening }) {
+export default function VoiceWidgetRhino({ initRhino, startListening, onCommandRecognized }) {
 
   const {
     inference,
@@ -52,6 +52,12 @@ export default function VoiceWidgetRhino({ initRhino, startListening }) {
       } // This function should start the Rhino listening process
     }
   }, [startListening, isLoaded]);
+
+  useEffect(() => {
+    if (inference) {
+      onCommandRecognized(inference);
+    }
+  }, [inference]);
 
   return (
     <div className="voice-widget">

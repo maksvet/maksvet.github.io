@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
+import { unstable_batchedUpdates } from 'react-dom';
 import CountdownTimer from './components/countdown.js';
 import VoiceWidget from './voiceWidgets/VoiceWidget.js';
 import VoiceWidgetRhino from './voiceWidgets/VoiceWidgetRhino.js';
+
+const VoiceWidgetRhinoMemo = memo(VoiceWidgetRhino);
 
 const App = () => {
   console.log('Rendering App component');
@@ -17,18 +20,16 @@ const App = () => {
 
   // Porcupine code
   const [wakeWordDetected, setWakeWordDetected] = useState(false);
+  const [isCommandRecognized, setIsCommandRecognized] = useState(false);
 
 
   const onWakeWordDetected = () => {
     console.log('Wake word detected');
-    setWakeWordDetected(true);
-    setInitRhino(false);
-    setTimeout(() => {
-      setInitRhino(true);
+    unstable_batchedUpdates(() => {
+      setWakeWordDetected(true);
       setIsListeningForCommand(true);
-    }, 0)
-
-
+      setIsCommandRecognized(false);
+    });
   };
 
   useEffect(() => {
@@ -37,23 +38,33 @@ const App = () => {
     }
   }, [wakeWordDetected]);
 
+
+
   // Rhino code
   const [initRhino, setInitRhino] = useState(false);
   const [isListeningForCommand, setIsListeningForCommand] = useState(false);
-  const onCommandRecognized = (command) => {
-    console.log(`Command recognized: ${command}`);
-    // Logic to handle different commands
-    if (command === 'Start') {
-      setStartCountdown(true);
-    }
-    // ... handle other commands
-    // // Reset Rhino states for next command
-    // setInitRhino(false);
-    // setTimeout(() => {
-    //   setInitRhino(true);
-    //   setStartlistening(true); // Re-activate listening
-    // }, 0);
+  const onCommandRecognized = (inference) => {
+    console.log(inference);
+    if (inference.isUnderstood) {
+      const { intent, slots } = inference;
+      console.log(`Intent recognized: ${intent}`);
+      // Logic to handle different intents
+      if (intent === 'Start') {
+        setStartCountdown(true);
+      }
+      else {
+        console.log('Intent not recognized');
+      }
+
+    };
+    setInitRhino(false); // check if release could be used instead
+    setIsCommandRecognized(true);
   };
+  useEffect(() => {
+    if (wakeWordDetected) {
+      setInitRhino(true);
+    }
+  }, [wakeWordDetected]);
 
   const handleTacticalLanding = () => {
     console.log("Tactical Landing Time reached!");
@@ -106,11 +117,11 @@ const App = () => {
       )}
 
       <div className="App">
-        <VoiceWidget onWakeWordDetected={onWakeWordDetected} />
+        <VoiceWidget onWakeWordDetected={onWakeWordDetected} isCommandRecognized={isCommandRecognized} />
       </div>
 
       {isListeningForCommand && (
-        <VoiceWidgetRhino initRhino={initRhino} startListening={isListeningForCommand} onCommandRecognized={onCommandRecognized} />
+        <VoiceWidgetRhinoMemo initRhino={initRhino} startListening={isListeningForCommand} onCommandRecognized={onCommandRecognized} />
       )}
     </div>
   );
