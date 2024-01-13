@@ -5,6 +5,7 @@ import VoiceWidget from './voiceWidgets/VoiceWidget.js';
 import VoiceWidgetRhino from './voiceWidgets/VoiceWidgetRhino.js';
 
 const VoiceWidgetRhinoMemo = memo(VoiceWidgetRhino);
+const CountdownTimerMemo = memo(CountdownTimer);
 
 const App = () => {
   console.log('Rendering App component');
@@ -20,16 +21,16 @@ const App = () => {
 
   // Porcupine code
   const [wakeWordDetected, setWakeWordDetected] = useState(false);
-  const [isCommandRecognized, setIsCommandRecognized] = useState(false);
-
+  //const [isCommandRecognized, setIsCommandRecognized] = useState(false);
+  const [restartCondition, setRestartCondition] = useState(false);
 
   const onWakeWordDetected = () => {
     console.log('Wake word detected');
-    unstable_batchedUpdates(() => {
-      setWakeWordDetected(true);
-      setIsListeningForCommand(true);
-      setIsCommandRecognized(false);
-    });
+
+    setWakeWordDetected(true);
+    //setIsCommandRecognized(false);
+    //setIsListeningForCommand(true);
+
   };
 
   useEffect(() => {
@@ -41,6 +42,10 @@ const App = () => {
 
 
   // Rhino code
+  const rhnRelease = () => {
+    setWakeWordDetected(false); // Reset wakeWordDetected
+    setInitRhino(false); // Reset initRhino
+  };
   const [initRhino, setInitRhino] = useState(false);
   const [isListeningForCommand, setIsListeningForCommand] = useState(false);
   const onCommandRecognized = (inference) => {
@@ -50,18 +55,22 @@ const App = () => {
       console.log(`Intent recognized: ${intent}`);
       // Logic to handle different intents
       if (intent === 'Start') {
-        setStartCountdown(true);
+        console.log('Start command recognized');
+        // setStartCountdown(true);
+        // console.log("setting is command recognized to true");
+        //setIsCommandRecognized(true);
+        //console.log(isCommandRecognized);
       }
-      else {
-        console.log('Intent not recognized');
-      }
-
+      setRestartCondition(true);
+      setIsListeningForCommand(false);
+      rhnRelease();
     };
-    setInitRhino(false); // check if release could be used instead
-    setIsCommandRecognized(true);
+
+
   };
   useEffect(() => {
     if (wakeWordDetected) {
+      console.log("setting initRhino to true");
       setInitRhino(true);
     }
   }, [wakeWordDetected]);
@@ -105,7 +114,7 @@ const App = () => {
 
       <button onClick={() => setStartCountdown(true)}>Start Countdown</button>
       {startCountdown && (
-        <CountdownTimer
+        <CountdownTimerMemo
           N0={N0}
           N1={N1}
           timeLeft={timeLeft}
@@ -115,13 +124,18 @@ const App = () => {
           isOpponentLanded={isOpponentLanded}
         />
       )}
+      <button onClick={() => setRestartCondition(!restartCondition)}>
+        Toggle Restart Condition {restartCondition ? "OFF" : "ON"}
+      </button>
 
       <div className="App">
-        <VoiceWidget onWakeWordDetected={onWakeWordDetected} isCommandRecognized={isCommandRecognized} />
+        <VoiceWidget onWakeWordDetected={onWakeWordDetected} restartCondition={restartCondition} setRestartCondition={setRestartCondition} />
       </div>
 
+
+
       {isListeningForCommand && (
-        <VoiceWidgetRhinoMemo initRhino={initRhino} startListening={isListeningForCommand} onCommandRecognized={onCommandRecognized} />
+        <VoiceWidgetRhinoMemo initRhino={initRhino} startListening={isListeningForCommand} onCommandRecognized={onCommandRecognized} onRelease={rhnRelease} />
       )}
     </div>
   );

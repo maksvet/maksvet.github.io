@@ -3,7 +3,8 @@ import { usePorcupine } from "@picovoice/porcupine-react";
 import porcupineModel from "../lib/porcupine/porcupineModel";
 import porcupineKeywords from "../lib/porcupine/porcupineKeywords";
 
-export default function VoiceWidget({ onWakeWordDetected, isCommandRecognized }) {
+
+export default function VoiceWidget({ onWakeWordDetected, restartCondition, setRestartCondition }) {
     const [keywordDetections, setKeywordDetections] = useState([]);
     const [isWakeWordDetected, setIsWakeWordDetected] = useState(false); // New state to track if wake word is detected
     const accessKey = process.env.REACT_APP_ACCESS_KEY || "";
@@ -21,27 +22,49 @@ export default function VoiceWidget({ onWakeWordDetected, isCommandRecognized })
 
     const initEngine = useCallback(async () => {
         await init(accessKey, porcupineKeywords, porcupineModel);
-        setIsWakeWordDetected(false); // Reset the detection state when initializing
     }, [init, porcupineKeywords, accessKey]);
 
     useEffect(() => {
         initEngine();
     }, [initEngine]);
 
-    useEffect(() => {
-        if (keywordDetection !== null && !isWakeWordDetected) {
-            setKeywordDetections((oldVal) => [...oldVal, keywordDetection.label]);
-            onWakeWordDetected();
-            setIsWakeWordDetected(true); // Set to true after detection
-        }
-    }, [keywordDetection, onWakeWordDetected, isWakeWordDetected]);
+    // useEffect(() => {
+    //     if (keywordDetection !== null && !isWakeWordDetected) {
+    //         setKeywordDetections((oldVal) => [...oldVal, keywordDetection.label]);
+    //         onWakeWordDetected();
+    //         setIsWakeWordDetected(true);
+    //         release() // Set to true after detection
+    //     }
+    // }, [keywordDetection, onWakeWordDetected, isWakeWordDetected]);
     // Reset isWakeWordDetected when the command recognition is finished
+    // Handle keyword detection
     useEffect(() => {
-        if (isCommandRecognized) {
-            console.log("Resetting isWakeWordDetected");
-            setIsWakeWordDetected(false);
+        if (keywordDetection !== null) {
+            setKeywordDetections((oldVal) => [...oldVal, keywordDetection.label]);
+
+            // Stop the engine when a keyword is detected
+            console.log("Stop the engine when a keyword is detected")
+            stop();
+            onWakeWordDetected();
+
+            // Log a message to the console
+            console.log('Wake word detected, stopping for a second...');
         }
-    }, [isCommandRecognized]);
+    }, [keywordDetection, stop]);
+
+    // Handle restart condition
+    useEffect(() => {
+        if (restartCondition) {
+            // Log a message to the console
+            console.log('Restart condition met, restarting...');
+
+            // Stop and restart the engine
+            stop();
+            start();
+
+            setRestartCondition(false);
+        }
+    }, [restartCondition, stop, start]);
 
     return (
         <div className="voice-widget">

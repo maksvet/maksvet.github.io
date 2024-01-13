@@ -6,7 +6,7 @@ import rhinoContext from "../lib/rhino/rhinoContext"
 
 const accessKey = process.env.REACT_APP_ACCESS_KEY || "";
 
-export default function VoiceWidgetRhino({ initRhino, startListening, onCommandRecognized }) {
+export default function VoiceWidgetRhino({ initRhino, startListening, onCommandRecognized, onRelease }) {
 
   const {
     inference,
@@ -36,6 +36,7 @@ export default function VoiceWidgetRhino({ initRhino, startListening, onCommandR
 
   const rhnRelease = async () => {
     await release()
+    onRelease()
   }
 
   useEffect(() => {
@@ -56,6 +57,7 @@ export default function VoiceWidgetRhino({ initRhino, startListening, onCommandR
   useEffect(() => {
     if (inference) {
       onCommandRecognized(inference);
+      release();
     }
   }, [inference]);
 
