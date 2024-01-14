@@ -56,16 +56,20 @@ const App = () => {
       // Logic to handle different intents
       if (intent === 'Start') {
         console.log('Start command recognized');
-        // setStartCountdown(true);
+        setStartCountdown(true);
         // console.log("setting is command recognized to true");
         //setIsCommandRecognized(true);
         //console.log(isCommandRecognized);
       }
       setRestartCondition(true);
       setIsListeningForCommand(false);
-      rhnRelease();
-    };
 
+    } else {
+      console.log('Command not recognized');
+      setIsListeningForCommand(false);
+      setRestartCondition(true);
+    }
+    rhnRelease();
 
   };
   useEffect(() => {
