@@ -57,10 +57,36 @@ const App = () => {
       if (intent === 'Start') {
         console.log('Start command recognized');
         setStartCountdown(true);
-        // console.log("setting is command recognized to true");
-        //setIsCommandRecognized(true);
-        //console.log(isCommandRecognized);
       }
+      if (intent === 'Stop') {
+        console.log('Stop command recognized');
+        setStartCountdown(false);
+      }
+      if (intent === 'I_landed') {
+        console.log('I_landed command recognized');
+        setIsPlayerLanded(true);
+      }
+      if (intent === 'I_am_up') {
+        console.log('I_am_up command recognized');
+        setIsPlayerLanded(false);
+      }
+      if (intent === 'Opponent_landed') {
+        console.log('Opponent_landed command recognized');
+        setIsOpponentLanded(true);
+      }
+      if (intent === 'Opponent_is_up') {
+        console.log('Opponent_is_up command recognized');
+        setIsOpponentLanded(false);
+      }
+      if (intent === 'I_made_cut') {
+        console.log('I_made_cut command recognized');
+        setN0(N0 + 1);
+      }
+      if (intent === 'Opponent_made_cut') {
+        console.log('Opponent_made_cut command recognized');
+        setN1(N1 + 1);
+      }
+
       setRestartCondition(true);
       setIsListeningForCommand(false);
 
