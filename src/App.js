@@ -3,9 +3,12 @@ import { unstable_batchedUpdates } from 'react-dom';
 import CountdownTimer from './components/countdown.js';
 import VoiceWidget from './voiceWidgets/VoiceWidget.js';
 import VoiceWidgetRhino from './voiceWidgets/VoiceWidgetRhino.js';
+import sprashivaite from './assets/mp3/sprashivaite.mp3';
+
 
 const VoiceWidgetRhinoMemo = memo(VoiceWidgetRhino);
 const CountdownTimerMemo = memo(CountdownTimer);
+const audio = new Audio(sprashivaite);
 
 const App = () => {
   console.log('Rendering App component');
@@ -26,6 +29,7 @@ const App = () => {
 
   const onWakeWordDetected = () => {
     console.log('Wake word detected');
+    audio.play();
 
     setWakeWordDetected(true);
     //setIsCommandRecognized(false);
