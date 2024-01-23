@@ -28,16 +28,7 @@ export default function VoiceWidget({ onWakeWordDetected, restartCondition, setR
         initEngine();
     }, [initEngine]);
 
-    // useEffect(() => {
-    //     if (keywordDetection !== null && !isWakeWordDetected) {
-    //         setKeywordDetections((oldVal) => [...oldVal, keywordDetection.label]);
-    //         onWakeWordDetected();
-    //         setIsWakeWordDetected(true);
-    //         release() // Set to true after detection
-    //     }
-    // }, [keywordDetection, onWakeWordDetected, isWakeWordDetected]);
-    // Reset isWakeWordDetected when the command recognition is finished
-    // Handle keyword detection
+    
     useEffect(() => {
         if (keywordDetection !== null) {
             setKeywordDetections((oldVal) => [...oldVal, keywordDetection.label]);

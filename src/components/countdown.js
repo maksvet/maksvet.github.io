@@ -15,6 +15,7 @@ const CountdownTimer = ({ N0, N1, timeLeft, setTimeLeft, onTacticalLanding, isPl
         }
     }, [timeLeft, setTimeLeft]);
 
+
     // Check condition for tactical landing
     useEffect(() => {
         const elapsedTime = totalMatchTime - timeLeft;

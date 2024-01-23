@@ -1,5 +1,4 @@
 import React, { useState, useEffect, memo } from 'react';
-import { unstable_batchedUpdates } from 'react-dom';
 import CountdownTimer from './components/countdown.js';
 import VoiceWidget from './voiceWidgets/VoiceWidget.js';
 import VoiceWidgetRhino from './voiceWidgets/VoiceWidgetRhino.js';
@@ -116,6 +115,7 @@ const App = () => {
   useEffect(() => {
     if (startCountdown) {
       const updateAirtime = () => {
+
         if (!isPlayerLanded) {
           setPlayerAirtime(playerAirtime + 1);
         }
@@ -128,6 +128,12 @@ const App = () => {
       return () => clearTimeout(timer);
     }
   }, [playerAirtime, opponentAirtime, isPlayerLanded, isOpponentLanded, startCountdown]);
+
+  useEffect(() => {
+    if (timeLeft <= 0) {
+      setStartCountdown(false);
+    }
+  }, [timeLeft]);
 
   const playerPoints = playerAirtime + 50 * N0;
   const opponentPoints = opponentAirtime + 50 * N1;
