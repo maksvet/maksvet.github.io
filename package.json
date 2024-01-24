@@ -3,21 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.16.7",
     "@picovoice/porcupine-react": "^3.0.3",
     "@picovoice/rhino-react": "^3.0.3",
     "@picovoice/web-voice-processor": "^4.0.8",
-    "@babel/plugin-proposal-private-property-in-object": "^7.16.7",
     "dotenv": "^16.3.1",
     "react": "^18.2.0",
     "react-countdown": "^2.3.5",
     "react-dom": "^18.2.0",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "stream-browserify": "^3.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "start:dev": "nodemon",
-    "build": "react-app-rewired build",
-    "test": "react-app-rewired test",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .js,.jsx"
   },
@@ -40,7 +41,6 @@
     ]
   },
   "devDependencies": {
-    "nodemon": "^3.0.2",
-    "react-app-rewired": "^2.2.1"
+    "nodemon": "^3.0.2"
   }
 }
