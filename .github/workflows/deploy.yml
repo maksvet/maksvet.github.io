@@ -3,7 +3,7 @@ name: React App Deployment
 on:
   push:
     branches:
-    - deploy_to_gh
+      - deploy_to_gh
 
 jobs:
   deploy-react-to-gh-pages:
@@ -12,22 +12,25 @@ jobs:
       REACT_APP_ACCESS_KEY: ${{ secrets.REACT_APP_ACCESS_KEY }}
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Setup Node.js environment
-      uses: actions/setup-node@v2.1.5
-      with:
-        node-version: "20.10.0"
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: "20.10.0"
 
-    - name: Install dependencies
-      run: npm i
+      - name: Install dependencies
+        run: npm i
 
-    - name: Build
-      run: npm run build
+      - name: Build
+        env:
+          CI: false
+          REACT_APP_ACCESS_KEY: ${{ secrets.REACT_APP_ACCESS_KEY }}
+        run: npm run build
 
-    - name: Deploy
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./build
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
