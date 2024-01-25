@@ -6,7 +6,7 @@ import porcupineKeywords from "../lib/porcupine/porcupineKeywords";
 
 export default function VoiceWidget({ onWakeWordDetected, restartCondition, setRestartCondition }) {
     const [keywordDetections, setKeywordDetections] = useState([]);
-    const [isWakeWordDetected, setIsWakeWordDetected] = useState(false); // New state to track if wake word is detected
+    //const [isWakeWordDetected, setIsWakeWordDetected] = useState(false); // New state to track if wake word is detected
     const accessKey = process.env.REACT_APP_ACCESS_KEY || "";
 
     const {
@@ -22,6 +22,7 @@ export default function VoiceWidget({ onWakeWordDetected, restartCondition, setR
 
     const initEngine = useCallback(async () => {
         await init(accessKey, porcupineKeywords, porcupineModel);
+    // eslint-disable-next-line
     }, [init, porcupineKeywords, accessKey]);
 
     useEffect(() => {
@@ -41,6 +42,7 @@ export default function VoiceWidget({ onWakeWordDetected, restartCondition, setR
             // Log a message to the console
             console.log('Wake word detected, stopping for a second...');
         }
+        // eslint-disable-next-line
     }, [keywordDetection, stop]);
 
     // Handle restart condition
@@ -55,6 +57,7 @@ export default function VoiceWidget({ onWakeWordDetected, restartCondition, setR
 
             setRestartCondition(false);
         }
+        // eslint-disable-next-line
     }, [restartCondition, stop, start]);
 
     return (

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useRhino } from "@picovoice/rhino-react";
 
 import rhinoModel from "../lib/rhino/rhinoModel";
@@ -43,6 +43,7 @@ export default function VoiceWidgetRhino({ initRhino, startListening, onCommandR
     if (initRhino) {
       rhnInit();
     }
+    // eslint-disable-next-line
   }, [initRhino]); // Dependency array
 
   useEffect(() => {
@@ -52,6 +53,7 @@ export default function VoiceWidgetRhino({ initRhino, startListening, onCommandR
         rhnProcess();
       } // This function should start the Rhino listening process
     }
+    // eslint-disable-next-line
   }, [startListening, isLoaded]);
 
   useEffect(() => {
@@ -59,6 +61,7 @@ export default function VoiceWidgetRhino({ initRhino, startListening, onCommandR
       onCommandRecognized(inference);
       release();
     }
+    // eslint-disable-next-line
   }, [inference]);
 
   return (
