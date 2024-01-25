@@ -1,6 +1,7 @@
 {
   "name": "timer",
   "version": "0.1.0",
+  "homepage": "https://maksvet.github.io",
   "private": true,
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.16.7",
