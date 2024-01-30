@@ -1,6 +1,6 @@
 const rhinoContext = {
-  publicPath: "contexts/F2D_ru_wasm_v3_0_0.rhn",
-  customWritePath: "F2D_ru_wasm_v3_0_0.rhn",
+  publicPath: "contexts/game_ru_wasm_v3_0_0.rhn",
+  customWritePath: "game_ru_wasm_v3_0_0.rhn",
 };
 
 (function () {
