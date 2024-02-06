@@ -1,14 +1,25 @@
 {
   "files": {
     "main.css": "/static/css/main.e6c13ad2.css",
-    "main.js": "/static/js/main.0d8a144c.js",
+    "main.js": "/static/js/main.0699c56a.js",
+    "static/media/ten_sec_no.mp3": "/static/media/ten_sec_no.a7cce90bf731491f4186.mp3",
+    "static/media/twenty_seconds.mp3": "/static/media/twenty_seconds.19e2d5e27899700800f3.mp3",
     "static/media/leopold_listens.mp3": "/static/media/leopold_listens.fa119020e2a6c7754bba.mp3",
+    "static/media/opponent_up.mp3": "/static/media/opponent_up.c214f32ff0606c129ecb.mp3",
+    "static/media/opponent_landed.mp3": "/static/media/opponent_landed.b63d41cb6276dd92ad63.mp3",
+    "static/media/minus_one.mp3": "/static/media/minus_one.f321f1d6b74464482ff2.mp3",
+    "static/media/plus_one.mp3": "/static/media/plus_one.556cec740d1cf55437fc.mp3",
+    "static/media/i_landed.mp3": "/static/media/i_landed.08ea16435888fd3de677.mp3",
+    "static/media/im_up.mp3": "/static/media/im_up.a6bd002b8640dfa3d1b8.mp3",
+    "static/media/didnt_understand.mp3": "/static/media/didnt_understand.de56dd2f719e8f822c1a.mp3",
+    "static/media/start.mp3": "/static/media/start.5b829f8e50f089bb2d13.mp3",
+    "static/media/stop.mp3": "/static/media/stop.5b8b69cd311f9f7c537e.mp3",
     "index.html": "/index.html",
     "main.e6c13ad2.css.map": "/static/css/main.e6c13ad2.css.map",
-    "main.0d8a144c.js.map": "/static/js/main.0d8a144c.js.map"
+    "main.0699c56a.js.map": "/static/js/main.0699c56a.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.0d8a144c.js"
+    "static/js/main.0699c56a.js"
   ]
 }
