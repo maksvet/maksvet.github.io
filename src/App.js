@@ -2,12 +2,12 @@ import React, { useState, useEffect, memo } from 'react';
 import CountdownTimer from './components/countdown.js';
 import VoiceWidget from './voiceWidgets/VoiceWidget.js';
 import VoiceWidgetRhino from './voiceWidgets/VoiceWidgetRhino.js';
-import leopold_listens from './assets/mp3/leopold_listens.mp3';
-
+import { audioFiles } from './components/audio_assets.js';
 
 const VoiceWidgetRhinoMemo = memo(VoiceWidgetRhino);
 const CountdownTimerMemo = memo(CountdownTimer);
-const audio = new Audio(leopold_listens);
+// const leo = new Audio(leopold_listens);
+// const didnt_understand = new Audio(didntunderstand);
 
 const App = () => {
   console.log('Rendering App component');
@@ -28,7 +28,8 @@ const App = () => {
 
   const onWakeWordDetected = () => {
     console.log('Wake word detected');
-    audio.play();
+    // leo.play();
+    new Audio(audioFiles.leopoldListens).play();
 
     setWakeWordDetected(true);
     //setIsCommandRecognized(false);
@@ -58,34 +59,42 @@ const App = () => {
       console.log(`Intent recognized: ${intent}`);
       // Logic to handle different intents
       if (intent === 'Start') {
+        new Audio(audioFiles.start).play();
         console.log('Start command recognized');
         setStartCountdown(true);
       }
       if (intent === 'Stop') {
+        new Audio(audioFiles.stop).play();
         console.log('Stop command recognized');
         setStartCountdown(false);
       }
       if (intent === 'I_landed') {
+        new Audio(audioFiles.i_landed).play();
         console.log('I_landed command recognized');
         setIsPlayerLanded(true);
       }
       if (intent === 'I_am_up') {
+        new Audio(audioFiles.im_up).play();
         console.log('I_am_up command recognized');
         setIsPlayerLanded(false);
       }
       if (intent === 'Opponent_landed') {
+        new Audio(audioFiles.opponent_landed).play();
         console.log('Opponent_landed command recognized');
         setIsOpponentLanded(true);
       }
       if (intent === 'Opponent_is_up') {
+        new Audio(audioFiles.opponent_up).play();
         console.log('Opponent_is_up command recognized');
         setIsOpponentLanded(false);
       }
       if (intent === 'I_made_cut') {
+        new Audio(audioFiles.plus_one).play();
         console.log('I_made_cut command recognized');
         setN0(N0 + 1);
       }
       if (intent === 'Opponent_made_cut') {
+        new Audio(audioFiles.minus_one).play();
         console.log('Opponent_made_cut command recognized');
         setN1(N1 + 1);
       }
@@ -94,6 +103,8 @@ const App = () => {
       setIsListeningForCommand(false);
 
     } else {
+      // didnt_understand.play();
+      new Audio(audioFiles.didntUnderstand).play();
       console.log('Command not recognized');
       setIsListeningForCommand(false);
       setRestartCondition(true);
