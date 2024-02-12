@@ -3,6 +3,7 @@ import CountdownTimer from './components/countdown.js';
 import VoiceWidget from './voiceWidgets/VoiceWidget.js';
 import VoiceWidgetRhino from './voiceWidgets/VoiceWidgetRhino.js';
 import { audioFiles } from './components/audio_assets.js';
+import { Setup, checkKey } from './Setup';
 
 const VoiceWidgetRhinoMemo = memo(VoiceWidgetRhino);
 const CountdownTimerMemo = memo(CountdownTimer);
@@ -10,8 +11,7 @@ const CountdownTimerMemo = memo(CountdownTimer);
 // const didnt_understand = new Audio(didntunderstand);
 
 const App = () => {
-  console.log('Rendering App component');
-
+  const [isSetupComplete, setIsSetupComplete] = useState(checkKey());
   const [N0, setN0] = useState(0);
   const [N1, setN1] = useState(0);
   const [isPlayerLanded, setIsPlayerLanded] = useState(false);
@@ -21,6 +21,7 @@ const App = () => {
   const [playerAirtime, setPlayerAirtime] = useState(0);
   const [opponentAirtime, setOpponentAirtime] = useState(0);
 
+  
   // Porcupine code
   const [wakeWordDetected, setWakeWordDetected] = useState(false);
   //const [isCommandRecognized, setIsCommandRecognized] = useState(false);
@@ -148,7 +149,19 @@ const App = () => {
 
   const playerPoints = playerAirtime + 50 * N0;
   const opponentPoints = opponentAirtime + 50 * N1;
+  
+  // Setup code
+  useEffect(() => {
+    if (!isSetupComplete) {
+      // Prompt the user for a key
+    }
+  }, [isSetupComplete]);
 
+  if (!isSetupComplete) {
+    return <Setup onKeySubmit={() => setIsSetupComplete(true)} />;
+  }
+
+  console.log('Rendering App component');
   return (
     <div>
       <input type="number" placeholder="N0 (My Cuts)" value={N0} onChange={(e) => setN0(parseInt(e.target.value, 10))} />
@@ -175,9 +188,6 @@ const App = () => {
           isOpponentLanded={isOpponentLanded}
         />
       )}
-      <button onClick={() => setRestartCondition(!restartCondition)}>
-        Toggle Restart Condition {restartCondition ? "OFF" : "ON"}
-      </button>
 
       <div className="App">
         <VoiceWidget onWakeWordDetected={onWakeWordDetected} restartCondition={restartCondition} setRestartCondition={setRestartCondition} />

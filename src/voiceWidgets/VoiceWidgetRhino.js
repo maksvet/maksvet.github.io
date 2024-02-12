@@ -3,8 +3,25 @@ import { useRhino } from "@picovoice/rhino-react";
 
 import rhinoModel from "../lib/rhino/rhinoModel";
 import rhinoContext from "../lib/rhino/rhinoContext"
+import CryptoJS from "crypto-js";
+import { checkKey } from '../Setup.js'; // adjust the path as needed
+const secretKey = process.env.REACT_APP_SECRET_KEY;
+// Call checkKey function to ensure accessKey is set up in local storage
+checkKey();
 
-const accessKey = process.env.REACT_APP_ACCESS_KEY || "";
+const encryptedKey = localStorage.getItem('accessKey');
+let accessKey = '';
+if (encryptedKey) {
+    const bytes  = CryptoJS.AES.decrypt(encryptedKey, secretKey);
+    accessKey = bytes.toString(CryptoJS.enc.Utf8);
+}
+
+
+//const accessKey = process.env.REACT_APP_ACCESS_KEY || "";
+// const accessKey = localStorage.getItem('accessKey');
+// const encryptedKey = localStorage.getItem('accessKey');
+//     const bytes  = CryptoJS.AES.decrypt(encryptedKey, secretKey);
+//     const accessKey = bytes.toString(CryptoJS.enc.Utf8);
 
 export default function VoiceWidgetRhino({ initRhino, startListening, onCommandRecognized, onRelease }) {
 

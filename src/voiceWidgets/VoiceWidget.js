@@ -2,12 +2,17 @@ import React, { useEffect, useState, useCallback } from "react";
 import { usePorcupine } from "@picovoice/porcupine-react";
 import porcupineModel from "../lib/porcupine/porcupineModel";
 import porcupineKeywords from "../lib/porcupine/porcupineKeywords";
-
+import CryptoJS from "crypto-js";
+const secretKey = process.env.REACT_APP_SECRET_KEY;
 
 export default function VoiceWidget({ onWakeWordDetected, restartCondition, setRestartCondition }) {
     const [keywordDetections, setKeywordDetections] = useState([]);
     //const [isWakeWordDetected, setIsWakeWordDetected] = useState(false); // New state to track if wake word is detected
-    const accessKey = process.env.REACT_APP_ACCESS_KEY || "";
+    //const accessKey = process.env.REACT_APP_ACCESS_KEY || "";
+    // const accessKey = localStorage.getItem('accessKey');
+    const encryptedKey = localStorage.getItem('accessKey');
+    const bytes  = CryptoJS.AES.decrypt(encryptedKey, secretKey);
+    const accessKey = bytes.toString(CryptoJS.enc.Utf8);
 
     const {
         keywordDetection,
@@ -64,11 +69,11 @@ export default function VoiceWidget({ onWakeWordDetected, restartCondition, setR
         <div className="voice-widget">
             <h2>Wake word</h2>
             <h3>
-                <label>
+                {/* <label>
                     <button className="init-button" onClick={() => initEngine()}>
                         Init Porcupine
                     </button>
-                </label>
+                </label> */}
             </h3>
             <h3>Loaded: {JSON.stringify(isLoaded)}</h3>
             <h3>Listening: {JSON.stringify(isListening)}</h3>
