@@ -9,7 +9,7 @@ jobs:
   deploy-react-to-gh-pages:
     runs-on: ubuntu-latest
     env:
-      REACT_APP_ACCESS_KEY: ${{ secrets.REACT_APP_ACCESS_KEY }}
+      REACT_APP_SECRET_KEY: ${{ secrets.REACT_APP_SECRET_KEY }}
 
     steps:
       - name: Checkout
