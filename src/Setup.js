@@ -21,11 +21,15 @@ export const Setup = ({ onKeySubmit }) => {
 
 export const checkKey = () => {
     const encryptedKey = localStorage.getItem('accessKey');
-    if (!encryptedKey) return false;
+    if (!encryptedKey) return null;
 
     const bytes  = CryptoJS.AES.decrypt(encryptedKey, secretKey);
     const originalKey = bytes.toString(CryptoJS.enc.Utf8);
 
     // Add your own logic to validate the key
-    return originalKey && originalKey.length > 0;
+    return originalKey && originalKey.length > 0 ? originalKey : null;
+};
+
+export const resetKey = () => {
+    localStorage.removeItem('accessKey');
 };

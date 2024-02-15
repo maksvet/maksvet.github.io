@@ -3,12 +3,10 @@ import CountdownTimer from './components/countdown.js';
 import VoiceWidget from './voiceWidgets/VoiceWidget.js';
 import VoiceWidgetRhino from './voiceWidgets/VoiceWidgetRhino.js';
 import { audioFiles } from './components/audio_assets.js';
-import { Setup, checkKey } from './Setup';
+import { Setup, checkKey, resetKey } from './Setup';
 
 const VoiceWidgetRhinoMemo = memo(VoiceWidgetRhino);
 const CountdownTimerMemo = memo(CountdownTimer);
-// const leo = new Audio(leopold_listens);
-// const didnt_understand = new Audio(didntunderstand);
 
 const App = () => {
   const [isSetupComplete, setIsSetupComplete] = useState(checkKey());
@@ -21,20 +19,15 @@ const App = () => {
   const [playerAirtime, setPlayerAirtime] = useState(0);
   const [opponentAirtime, setOpponentAirtime] = useState(0);
 
-  
   // Porcupine code
   const [wakeWordDetected, setWakeWordDetected] = useState(false);
-  //const [isCommandRecognized, setIsCommandRecognized] = useState(false);
   const [restartCondition, setRestartCondition] = useState(false);
 
   const onWakeWordDetected = () => {
     console.log('Wake word detected');
-    // leo.play();
     new Audio(audioFiles.leopoldListens).play();
 
     setWakeWordDetected(true);
-    //setIsCommandRecognized(false);
-    //setIsListeningForCommand(true);
 
   };
 
@@ -43,8 +36,6 @@ const App = () => {
       setIsListeningForCommand(true);
     }
   }, [wakeWordDetected]);
-
-
 
   // Rhino code
   const rhnRelease = () => {
@@ -57,6 +48,7 @@ const App = () => {
     console.log(inference);
     if (inference.isUnderstood) {
       const { intent, slots } = inference;
+      // ignore lint
       console.log(`Intent recognized: ${intent}`);
       // Logic to handle different intents
       if (intent === 'Start') {
@@ -104,7 +96,6 @@ const App = () => {
       setIsListeningForCommand(false);
 
     } else {
-      // didnt_understand.play();
       new Audio(audioFiles.didntUnderstand).play();
       console.log('Command not recognized');
       setIsListeningForCommand(false);
@@ -160,8 +151,11 @@ const App = () => {
   if (!isSetupComplete) {
     return <Setup onKeySubmit={() => setIsSetupComplete(true)} />;
   }
+  const handleReset = () => {
+    resetKey();
+    setIsSetupComplete(false);
+  };
 
-  console.log('Rendering App component');
   return (
     <div>
       <input type="number" placeholder="N0 (My Cuts)" value={N0} onChange={(e) => setN0(parseInt(e.target.value, 10))} />
@@ -193,11 +187,11 @@ const App = () => {
         <VoiceWidget onWakeWordDetected={onWakeWordDetected} restartCondition={restartCondition} setRestartCondition={setRestartCondition} />
       </div>
 
-
-
       {isListeningForCommand && (
+        /* eslint-disable-next-line jsx-a11y/no-access-key */
         <VoiceWidgetRhinoMemo initRhino={initRhino} startListening={isListeningForCommand} onCommandRecognized={onCommandRecognized} onRelease={rhnRelease} />
       )}
+      <button onClick={handleReset}>Reset Key</button>
     </div>
   );
 };

@@ -4,27 +4,12 @@ import { useRhino } from "@picovoice/rhino-react";
 import rhinoModel from "../lib/rhino/rhinoModel";
 import rhinoContext from "../lib/rhino/rhinoContext"
 import CryptoJS from "crypto-js";
-import { checkKey } from '../Setup.js'; // adjust the path as needed
 const secretKey = process.env.REACT_APP_SECRET_KEY;
-// Call checkKey function to ensure accessKey is set up in local storage
-checkKey();
-
-const encryptedKey = localStorage.getItem('accessKey');
-let accessKey = '';
-if (encryptedKey) {
-    const bytes  = CryptoJS.AES.decrypt(encryptedKey, secretKey);
-    accessKey = bytes.toString(CryptoJS.enc.Utf8);
-}
-
-
-//const accessKey = process.env.REACT_APP_ACCESS_KEY || "";
-// const accessKey = localStorage.getItem('accessKey');
-// const encryptedKey = localStorage.getItem('accessKey');
-//     const bytes  = CryptoJS.AES.decrypt(encryptedKey, secretKey);
-//     const accessKey = bytes.toString(CryptoJS.enc.Utf8);
 
 export default function VoiceWidgetRhino({ initRhino, startListening, onCommandRecognized, onRelease }) {
-
+  const encryptedKey = localStorage.getItem('accessKey');
+  const bytes  = CryptoJS.AES.decrypt(encryptedKey, secretKey);
+  const accessKey = bytes.toString(CryptoJS.enc.Utf8);
   const {
     inference,
     contextInfo,
@@ -92,6 +77,7 @@ export default function VoiceWidgetRhino({ initRhino, startListening, onCommandR
       <h3>Rhino Loaded: {JSON.stringify(isLoaded)}</h3>
       <h3>Listening: {JSON.stringify(isListening)}</h3>
       <h3>Error: {JSON.stringify(error !== null)}</h3>
+      {error && <pre>Error Details: {JSON.stringify(error, null, 2)} AccessKey: {accessKey}</pre>}
 
       <br />
       <button
