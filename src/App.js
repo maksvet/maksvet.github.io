@@ -21,22 +21,28 @@ const App = () => {
 
   //testing the sounds
   const [userConsent, setUserConsent] = useState(false);
-  const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
+  const playAudio = (audioFile) => {
+    if (userConsent) {
+      new Audio(audioFile).play();
+    }
+  };
+
+  // const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
 
 
-  useEffect(() => {
-    const audioArray = Object.values(audioFiles); // convert object values to an array
-    const interval = setInterval(() => {
-      if (userConsent) {
-        console.log('userConsent:', userConsent); // Log userConsent
-        console.log('currentAudioIndex:', currentAudioIndex); // Log currentAudioIndex
-        new Audio(audioArray[currentAudioIndex]).play();
-        setCurrentAudioIndex((currentAudioIndex + 1) % audioArray.length);
-      }
-    }, 1000);
+  // useEffect(() => {
+  //   const audioArray = Object.values(audioFiles); // convert object values to an array
+    // const interval = setInterval(() => {
+    //   if (userConsent) {
+    //     console.log('userConsent:', userConsent); // Log userConsent
+    //     console.log('currentAudioIndex:', currentAudioIndex); // Log currentAudioIndex
+    //     new Audio(audioArray[currentAudioIndex]).play();
+    //     setCurrentAudioIndex((currentAudioIndex + 1) % audioArray.length);
+    //   }
+    // }, 1000);
 
-    return () => clearInterval(interval);
-  }, [userConsent, currentAudioIndex]);
+  //   return () => clearInterval(interval);
+  // }, [userConsent, currentAudioIndex]);
 
   // Porcupine code
   const [wakeWordDetected, setWakeWordDetected] = useState(false);
@@ -44,7 +50,8 @@ const App = () => {
 
   const onWakeWordDetected = () => {
     console.log('Wake word detected');
-    new Audio(audioFiles.leopoldListens).play();
+    // new Audio(audioFiles.leopoldListens).play();
+    playAudio(audioFiles.leopoldListens);
 
     setWakeWordDetected(true);
 
@@ -71,42 +78,50 @@ const App = () => {
       console.log(`Intent recognized: ${intent}`);
       // Logic to handle different intents
       if (intent === 'Start') {
-        new Audio(audioFiles.start).play();
+        // new Audio(audioFiles.start).play();
+        playAudio(audioFiles.start);
         console.log('Start command recognized');
         setStartCountdown(true);
       }
       if (intent === 'Stop') {
-        new Audio(audioFiles.stop).play();
+        // new Audio(audioFiles.stop).play();
+        playAudio(audioFiles.stop);
         console.log('Stop command recognized');
         setStartCountdown(false);
       }
       if (intent === 'I_landed') {
-        new Audio(audioFiles.i_landed).play();
+        // new Audio(audioFiles.i_landed).play();
+        playAudio(audioFiles.i_landed);
         console.log('I_landed command recognized');
         setIsPlayerLanded(true);
       }
       if (intent === 'I_am_up') {
-        new Audio(audioFiles.im_up).play();
+        // new Audio(audioFiles.im_up).play();
+        playAudio(audioFiles.im_up);
         console.log('I_am_up command recognized');
         setIsPlayerLanded(false);
       }
       if (intent === 'Opponent_landed') {
-        new Audio(audioFiles.opponent_landed).play();
+        // new Audio(audioFiles.opponent_landed).play();
+        playAudio(audioFiles.opponent_landed);
         console.log('Opponent_landed command recognized');
         setIsOpponentLanded(true);
       }
       if (intent === 'Opponent_is_up') {
-        new Audio(audioFiles.opponent_up).play();
+        // new Audio(audioFiles.opponent_up).play();
+        playAudio(audioFiles.opponent_up);
         console.log('Opponent_is_up command recognized');
         setIsOpponentLanded(false);
       }
       if (intent === 'I_made_cut') {
-        new Audio(audioFiles.plus_one).play();
+        // new Audio(audioFiles.plus_one).play();
+        playAudio(audioFiles.plus_one);
         console.log('I_made_cut command recognized');
         setN0(N0 + 1);
       }
       if (intent === 'Opponent_made_cut') {
-        new Audio(audioFiles.minus_one).play();
+        // new Audio(audioFiles.minus_one).play();
+        playAudio(audioFiles.minus_one);
         console.log('Opponent_made_cut command recognized');
         setN1(N1 + 1);
       }
@@ -115,7 +130,8 @@ const App = () => {
       setIsListeningForCommand(false);
 
     } else {
-      new Audio(audioFiles.didntUnderstand).play();
+      // new Audio(audioFiles.didntUnderstand).play();
+      playAudio(audioFiles.didntUnderstand);
       console.log('Command not recognized');
       setIsListeningForCommand(false);
       setRestartCondition(true);
