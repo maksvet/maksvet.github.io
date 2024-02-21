@@ -19,6 +19,25 @@ const App = () => {
   const [playerAirtime, setPlayerAirtime] = useState(0);
   const [opponentAirtime, setOpponentAirtime] = useState(0);
 
+  //testing the sounds
+  const [userConsent, setUserConsent] = useState(false);
+  const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
+
+
+  useEffect(() => {
+    const audioArray = Object.values(audioFiles); // convert object values to an array
+    const interval = setInterval(() => {
+      if (userConsent) {
+        console.log('userConsent:', userConsent); // Log userConsent
+        console.log('currentAudioIndex:', currentAudioIndex); // Log currentAudioIndex
+        new Audio(audioArray[currentAudioIndex]).play();
+        setCurrentAudioIndex((currentAudioIndex + 1) % audioArray.length);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [userConsent, currentAudioIndex]);
+
   // Porcupine code
   const [wakeWordDetected, setWakeWordDetected] = useState(false);
   const [restartCondition, setRestartCondition] = useState(false);
@@ -158,6 +177,7 @@ const App = () => {
 
   return (
     <div>
+      <button onClick={() => setUserConsent(true)}>Give Consent</button>
       <input type="number" placeholder="N0 (My Cuts)" value={N0} onChange={(e) => setN0(parseInt(e.target.value, 10))} />
       <button onClick={() => setIsPlayerLanded(!isPlayerLanded)}>
         {isPlayerLanded ? "Take Off" : "Land"}
